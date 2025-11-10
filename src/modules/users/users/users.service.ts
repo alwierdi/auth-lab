@@ -9,8 +9,22 @@ import { UpdateUserDto } from '../dto/update-user.dto';
 export class UsersService {
   constructor(private prismaService: PrismaService) {}
 
-  async getAll(): Promise<User[]> {
-    return this.prismaService.user.findMany();
+  async getAll() {
+    return this.prismaService.user.findMany({
+      select: {
+        id: true,
+        fullName: true,
+        email: true,
+        roles: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+        isActive: true,
+        createdAt: true,
+      },
+    });
   }
 
   async getUserById(id: string) {
